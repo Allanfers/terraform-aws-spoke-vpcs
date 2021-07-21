@@ -24,7 +24,9 @@ resource "aws_subnet" "public_subnet" {
   #availability_zone = element(var.use-az_id, count.index)
   availability_zone_id = element(var.use_az_id, count.index) 
   
- tags = merge( {"Name" = format("%s_public_subnet_%s", var.name, element(var.use_az_id, count.index),)},) }
+ tags = merge( {"Name" = format("%s_public_subnet_%s", var.name, element(var.use_az_id, count.index))}) 
+  
+}
 
 #cria as public route tables
 
@@ -124,6 +126,7 @@ resource "aws_route_table_association" "endpoint_route_table_association" {
   count = length(var.endpoint_subnets)
   subnet_id       = element(aws_subnet.endpoint_subnet.*.id, count.index)
   route_table_id  = element(aws_route_table.endpoint_route_table.*.id, count.index)
+  #depends_on = element(aws_route_table.endpoint_route_table.*.id, count.index)
 }
 
 ######################
